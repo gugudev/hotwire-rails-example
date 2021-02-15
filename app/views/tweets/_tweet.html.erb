@@ -1,0 +1,7 @@
+<div style="background: lightgrey; width: 300px; padding: 10px;">
+  <%= tweet.body %>
+   <br>
+  <%= link_to :edit, edit_tweet_path(tweet) %>
+  <%= button_to "likes (#{tweet.likes || 0})", tweet_path(tweet, like: true), method: :put %>
+</div>
+<br>
