@@ -45,13 +45,26 @@ class TweetsController < ApplicationController
 
   # PATCH/PUT /tweets/1 or /tweets/1.json
   def update
-    respond_to do |format|
-      if @tweet.update(tweet_params)
-        format.html { redirect_to @tweet, notice: "Tweet was successfully updated." }
+    if params[:like] == 'true'
+      @tweet.increment!(:likes)
+      respond_to do |format|
+        format.html { redirect_to @tweet }
         format.json { render :show, status: :ok, location: @tweet }
-      else
-        format.html { render :edit, status: :unprocessable_entity }
-        format.json { render json: @tweet.errors, status: :unprocessable_entity }
+      end
+    else
+      respond_to do |format|
+        if @tweet.update(tweet_params)
+          format.html { redirect_to @tweet }
+          format.json { render :show, status: :ok, location: @tweet }
+        else
+          format.turbo_stream do
+            render turbo_stream: turbo_stream.replace(
+              @tweet, partial: 'tweets/form', locals: { tweet: @tweet }
+            )
+          end
+          format.html { render :edit, status: :unprocessable_entity }
+          format.json { render json: @tweet.errors, status: :unprocessable_entity }
+        end
       end
     end
   end
