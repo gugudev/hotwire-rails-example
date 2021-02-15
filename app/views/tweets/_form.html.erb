@@ -4,8 +4,8 @@
      <h2><%= pluralize(tweet.errors.count, "error") %> prohibited this tweet from being saved:</h2>
 ​
      <ul>
-      <% tweet.errors.each do |error| %>
-         <li><%= error.full_message %></li>
+      <% tweet.errors.full_messages.each do |msg| %>
+         <li><%= msg %></li>
       <% end %>
      </ul>
    </div>

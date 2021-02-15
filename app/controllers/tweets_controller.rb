@@ -31,6 +31,7 @@ class TweetsController < ApplicationController
        end
        format.json { render :show, status: :created, location: @tweet }
      else
+
        format.turbo_stream do
          render turbo_stream: turbo_stream.replace(
            @tweet, partial: 'tweets/form', locals: { tweet: @tweet }
